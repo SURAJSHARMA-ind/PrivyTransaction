@@ -1,0 +1,41 @@
+{
+  "name": "privy_sign_poc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gen:p256": "node genP256Spki.js",
+    "gen:p256:ecdsa": "node genP256Spki.js ecdsa",
+    "decrypt:hpke": "node decryptHpke.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hpke/chacha20poly1305": "^1.7.1",
+    "@hpke/core": "^1.7.4",
+    "@hpke/dhkem-x25519": "^1.6.4",
+    "@mysten/sui": "^1.37.6",
+    "@mysten/sui.js": "^0.54.1",
+    "@noble/curves": "^2.0.0",
+    "@noble/ed25519": "^3.0.0",
+    "@noble/hashes": "^2.0.0",
+    "@privy-io/server-auth": "^1.32.2",
+    "axios": "^1.11.0",
+    "blake2b": "^2.1.4",
+    "dotenv": "^17.2.1",
+    "elliptic": "^6.6.1",
+    "jose": "^6.1.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SURAJSHARMA-ind/PrivyTransaction.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SURAJSHARMA-ind/PrivyTransaction/issues"
+  },
+  "homepage": "https://github.com/SURAJSHARMA-ind/PrivyTransaction#readme"
+}
