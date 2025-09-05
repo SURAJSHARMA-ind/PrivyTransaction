@@ -1,3 +1,5 @@
+// Try to put in a single file but not tested yet
+
 import { webcrypto as crypto } from "node:crypto";
 import { CipherSuite, DhkemP256HkdfSha256, HkdfSha256 } from "@hpke/core";
 import { Chacha20Poly1305 } from "@hpke/chacha20poly1305";
@@ -5,12 +7,12 @@ import canonicalize from "json-canonicalize";
 import https from "https";
 
 // --- CONFIG ---
-const PRIVY_APP_ID = "cmdip4eml0064l40jspyn9iii";
+const PRIVY_APP_ID = "";
 const PRIVY_BASIC_AUTH =
-  "Y21kaXA0ZW1sMDA2NGw0MGpzcHluOWlpaTo1aDhBS3dtek1LcVJaTXdpc0VvUDJ2dGhIUjVTRGlvb25YZ01yWW9CU21Tb2h3cjNnRHB5d2tpUUVnWTZIc2VHUEZtR0RzYXFveVZKRWY3eVphdWV1NzRF";
+  "";
 const PRIVY_USER_JWT =
-  "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlBrd2psay1LWHM2WUFCRjVkQ3hyZERUVUxGR3BfQ0ZwaUJBT2Z4WURmbzAifQ.eyJzaWQiOiJjbWYzbXJ3MDMwMDZtbDIwY3hndmkxN3BrIiwiaXNzIjoicHJpdnkuaW8iLCJpYXQiOjE3NTY4OTE2NTUsImF1ZCI6ImNtZGlwNGVtbDAwNjRsNDBqc3B5bjlpaWkiLCJzdWIiOiJkaWQ6cHJpdnk6Y21lcXVnaWphMDA0MGt6MGJjeHIyeDFsdyIsImV4cCI6MTc1Njg5NTI1NX0.lXob4wp1GILUVD4KcoEnKWxkT-zQBgQMyZQOvF7BF4cuRyxR4laJI2o0t6oJiL-x6GMTwnNLnazdmnBaAqCQBQ";
-const WALLET_ID = "fcvsl05oo5muzkdizixbvz62"; // update if needed
+  "";
+const WALLET_ID = ""; //get after u login admin website and u can get it inside authenticate api
 
 // --- UTILS ---
 function bytesToB64(bytes) {
