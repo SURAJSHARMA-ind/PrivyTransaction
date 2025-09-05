@@ -27,9 +27,9 @@
     "blake2b": "^2.1.4",
     "dotenv": "^17.2.1",
     "elliptic": "^6.6.1",
-    "jose": "^6.1.0"
+    "jose": "^6.1.0",
+    "json-canonicalize": "^2.0.0"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SURAJSHARMA-ind/PrivyTransaction.git"

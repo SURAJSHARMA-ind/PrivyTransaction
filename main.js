@@ -25,8 +25,3 @@ async function hashTx() {
     return hashToSign;
     console.log("📝 Hash to sign:", hashToSign);
 }
-
-const hashTxn = await hashTx();
-const hashToSign = '0x' + hashTxn;
-
-
