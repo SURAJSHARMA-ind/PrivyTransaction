@@ -7,9 +7,9 @@ import { b64ToBytes } from './bytes.js';
 const { subtle } = webcrypto;
 
 // Fill these from your server response / storage:
-const PRIVATE_KEY_PKCS8_B64 = 'MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgvvyWw1anFt2GWkAZ9RDiD05QekQl3V/oqzB4wXaBDU2hRANCAATfioVWQ6C34rFeCKfWid9i2PiL6QXB3TfXKuIBFn1d+aO5cqG4YJKwcHnLCX9V2zePPViqyKnFVUPIEZNz5FPi';  // your ECDH P-256 private key (PKCS8) base64
-const ENC_B64 = 'BB2mB2TWdAnBBnHxaQ7nb+/rHPN+h9fnpYXZa0OI+enE9KhBLvM57DIdA9VmZ0axIymUBXHPoD+kY61HDfnbjAY=';                // HPKE encapsulated key (base64)
-const CIPHERTEXT_B64 = 'mzrKcSC+TO25jzgz7TPYWrowCPJ5tNFrMa2z49jyRGdzJNjZ5W1N6Y+fh6kXq3kmlUiRcnqvUsPtpzmbDUZjKjjJ+gRCnpfU1+2D+aoqYsTpLE+mSH+mcfvmRDKdMAzrciO/2NcCnxmyQJozlEiVVf3SW7+3OUts7l1+EBqgO/oxaiSi9897s2NWOdT/6YMSBbEj3F1dr6qkvPGnoJgEQ6tvMeooFscKwhXqiufKBgTkwOOU4F03eoYxWuY9BcRE5bAP0bx0UFw=';         // HPKE ciphertext (base64)
+const PRIVATE_KEY_PKCS8_B64 = 'MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgs9OGAdjiXpcbH1tXk0kd8/ctAk8t7nS8cDbYVMBvpMKhRANCAARIWjMPEwMu3trw54ic6SFjcRazFJRCABxaOP9/vxjdKX4noZ1Q/lLp1zPlRdvuVGaQ/kfE+HgQa54ANwhK99NA';  // your ECDH P-256 private key (PKCS8) base64
+const ENC_B64 = 'BDsol5tQ7V77I8LAVvN3t9OUDB98EPuymhtIgQj/9xfMuaDe2eEbE7xsVPOJDym99WjH6THeErci+Cs839szgXo=';                // HPKE encapsulated key (base64)
+const CIPHERTEXT_B64 = 'HRZpW2odKBOOGEmGdsblnQJEL7GJpIBqLfeyBNcr2fgmL8W+PgAmy6/oST+Bh5LPzyikon38Ix6UP5bE6udlK2hOIIERcfpSXcBMZZFORG3Kn19PVryMfCFBt7eHI32C4fa6aVIeFEbdyspgNWF9GhdU9nyNPshFWM596+QCz9hvzy058tcKXdYEVMUDFAg92nr+8JnKMPVLBnj0/BbPClA/2ruroXVAcvbpn1dPC231lOyc0d7EvWvJ1BHnBg+xUs8USjxyro0=';         // HPKE ciphertext (base64)
 
 async function decryptAuthorizationKey(pkcs8B64, encB64, ctB64) {
   // Keep everything as Uint8Array

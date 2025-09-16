@@ -19,7 +19,7 @@ async function generateP256ECDH() {
   console.log('[ECDH] Private Key (PKCS8, base64) - keep secret:');
   console.log(bytesToB64(pkcs8));
 
-  // If you really need JWK, do it carefully; base64url != base64
+  // // If you really need JWK, do it carefully; base64url != base64
   // const jwk = await subtle.exportKey('jwk', keyPair.privateKey);
   // console.log('[ECDH] Private JWK.d (base64url) - DO NOT LOG IN PROD');
   // console.log(jwk.d);
@@ -29,3 +29,4 @@ generateP256ECDH().catch((e) => {
   console.error('Keygen error:', e);
   process.exit(1);
 });
+

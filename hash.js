@@ -22,8 +22,8 @@ async function hashTx() {
     const intentMessage = messageWithIntent("TransactionData", txBytes);
     const digest = blake2b(intentMessage, { dkLen: 32 });
     const hashToSign = "0x" + toHex(digest);
-    return hashToSign;
     console.log("📝 Hash to sign:", hashToSign);
+    return hashToSign;
 }
 
 const hashTxn = await hashTx();

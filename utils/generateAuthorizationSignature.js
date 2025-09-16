@@ -5,7 +5,7 @@ import {canonicalize} from "json-canonicalize";
 // Replace with your actual decrypted Privy authorization key
 // (the one you got after decryption, starting with "wallet-auth:")
 const PRIVY_AUTHORIZATION_KEY =
-  "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgOsUPrghyiWpf1hu621ECHd+33BMZvM7ihsQuC2PeJNChRANCAAQpDQTuOUZM6HAmL25jKKR1X4dXo13a8xmVWfV5/tGGBW5c9QEg6iI8R8/2CCfV2KshfA0hE71eE75FEWgKFEOy";
+  "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgzlk8Q+HL5ePCFwcC0kXsEN6wVVfF1zPsWPxahdeMY5ehRANCAAQu15LdLqQ8FsKGmdjB4gOL323Ah/VIg/cmfmngmV7OROpDjaABH4sxgoy/ITz6ujSAY/Ij0Z5zlTMshLn6qjs/";
 
 /**
  * Generate an authorization signature for Privy API
@@ -46,7 +46,7 @@ function getAuthorizationSignature({ url, body }) {
 
 // Example usage
 const signature = getAuthorizationSignature({
-  url: "/v1/wallets/your_wallet_id/raw_sign",
+  url: "/v1/wallets/fcvsl05oo5muzkdizixbvz62/raw_sign",
   body: {
     // Example body data you’re sending
     hash: "0x0bd61313bc3103e806197bd99da4a6a6c567428e27b099365fd52c16daf05f03",
@@ -54,3 +54,5 @@ const signature = getAuthorizationSignature({
 });
 
 console.log("Authorization Signature:", signature);
+
+
