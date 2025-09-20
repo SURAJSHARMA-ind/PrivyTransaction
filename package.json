@@ -37,5 +37,8 @@
   "bugs": {
     "url": "https://github.com/SURAJSHARMA-ind/PrivyTransaction/issues"
   },
-  "homepage": "https://github.com/SURAJSHARMA-ind/PrivyTransaction#readme"
+  "homepage": "https://github.com/SURAJSHARMA-ind/PrivyTransaction#readme",
+  "devDependencies": {
+    "@types/node": "^24.5.2"
+  }
 }

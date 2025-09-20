@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",                     /* modern JS */
+    "module": "NodeNext",                   /* support .mts/.cts and ESM */
+    "moduleResolution": "NodeNext",         /* tells TS how to resolve modules */
+    "outDir": "./dist",                     /* compiled JS output */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "types": ["node"],                      /* ensure Node.js built-ins are typed */
+    "resolveJsonModule": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
+}
