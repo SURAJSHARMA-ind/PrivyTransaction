@@ -2,11 +2,19 @@ import { webcrypto as crypto } from "node:crypto";
 import { CipherSuite, DhkemP256HkdfSha256, HkdfSha256 } from "@hpke/core";
 import { Chacha20Poly1305 } from "@hpke/chacha20poly1305";
 import { generateAuthorizationSignature } from "@privy-io/server-auth/wallet-api";
+import { messageWithIntent, toSerializedSignature, } from "@mysten/sui/cryptography";
+import { SuiClient, getFullnodeUrl } from "@mysten/sui/client";
+import { verifyTransactionSignature } from "@mysten/sui/verify";
+import { blake2b } from "@noble/hashes/blake2.js";
+import { Transaction } from "@mysten/sui/transactions";
+import { toHex } from "@mysten/sui/utils";
+import { Ed25519PublicKey } from "@mysten/sui/keypairs/ed25519";
+// After you've added the data to your transaction
 const { subtle } = crypto;
 // --- CONFIGURATION (replace with your values) ---
 const WALLET_ID = "fcvsl05oo5muzkdizixbvz62";
 const PRIVY_APP_ID = "cmdip4eml0064l40jspyn9iii";
-const USER_JWT = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlBrd2psay1LWHM2WUFCRjVkQ3hyZERUVUxGR3BfQ0ZwaUJBT2Z4WURmbzAifQ.eyJzaWQiOiJjbWZydnAwNzMwMWR4bDQwY2g5dG81dDN0IiwiaXNzIjoicHJpdnkuaW8iLCJpYXQiOjE3NTgzNDkxNjYsImF1ZCI6ImNtZGlwNGVtbDAwNjRsNDBqc3B5bjlpaWkiLCJzdWIiOiJkaWQ6cHJpdnk6Y21mMjZsOXZiMDE1bGxiMGJoZnUxZmRsZyIsImV4cCI6MTc1ODM1Mjc2Nn0.i3WhSq1048Bu4oNsjNYN3cuiPpTUmQSn2YT4L9W3-51Nj_f6H0YnbiYvAFln5P_J-5EPbt6PJS49SboUGAO-Ww";
+const USER_JWT = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlBrd2psay1LWHM2WUFCRjVkQ3hyZERUVUxGR3BfQ0ZwaUJBT2Z4WURmbzAifQ.eyJzaWQiOiJjbWZ1dHZ2ZXowMTFzaWMwY3czaGtsN2IzIiwiaXNzIjoicHJpdnkuaW8iLCJpYXQiOjE3NTg1Mjc1MjYsImF1ZCI6ImNtZGlwNGVtbDAwNjRsNDBqc3B5bjlpaWkiLCJzdWIiOiJkaWQ6cHJpdnk6Y21mMjZsOXZiMDE1bGxiMGJoZnUxZmRsZyIsImV4cCI6MTc1ODUzMTEyNn0.afc1wZSakct94MxQP5br9KnPruoggRs5o2m51fVDCyYkxiCRdx_NOCFQQ3QtW-30r8AHh5Iyq6iKS7MsYWr58A";
 const PRIVY_APP_SECRET = "5h8AKwmzMKqRZMwisEoP2vthHR5SDioonXgMrYoBSmSohwr3gDpywkiQEgY6HseGPFmGDsaqoyVJEf7yZaueu74E";
 // --- UTILITY FUNCTIONS ---
 /** Converts an ArrayBuffer to a Uint8Array. */
@@ -82,6 +90,31 @@ async function main() {
         throw new Error("Privy authentication failed");
     }
     const data = await authResp.json();
+    console.log("Authenticate Response", data);
+    const wallet = data.wallets?.[0];
+    if (!wallet?.public_key) {
+        throw new Error("Wallet publicKey is missing");
+    }
+    let publicKeyStr;
+    if (typeof wallet.public_key === "string") {
+        publicKeyStr = wallet.public_key;
+    }
+    else if ("Ed25519" in wallet.public_key) {
+        publicKeyStr = wallet.public_key.Ed25519;
+    }
+    else {
+        throw new Error("Unknown public_key format");
+    }
+    // Convert base64 string to PublicKey instance
+    const publicKeyObj = new Ed25519PublicKey(publicKeyStr);
+    // ...existing code...
+    const address = data.wallets?.[0]?.address;
+    if (!address) {
+        throw new Error("Wallet address is missing");
+    }
+    // ...existing code...
+    console.log("publickey", publicKeyObj);
+    console.log("address", address);
     const encryptedKey = data?.encrypted_authorization_key;
     if (!encryptedKey?.encapsulated_key || !encryptedKey?.ciphertext) {
         throw new Error("Missing encrypted_authorization_key in response");
@@ -89,11 +122,23 @@ async function main() {
     console.log("✅ Authentication successful.");
     // 3. Decrypt the authorization key using the ephemeral private key
     const privyAuthKeyPem = await decryptAuthorizationKey(ephemeralPrivateKeyB64, encryptedKey.encapsulated_key, encryptedKey.ciphertext);
+    const sender = "0x8762666447873afe0dbbcc3e8f1fd4164c3251c42cfa3454f339173145db1a59"; //
+    const tx = new Transaction();
+    tx.transferObjects([tx.gas], tx.pure.address(address.toString()));
+    tx.setSender(sender);
+    const client = new SuiClient({ url: getFullnodeUrl("testnet") });
+    // build transaction
+    const txBytes = await tx.build({ client });
+    const intentMessage = messageWithIntent("TransactionData", txBytes);
+    const digest = blake2b(intentMessage, { dkLen: 32 });
+    // Convert the digest to a hex string for signing
+    const hashToSign = "0x" + toHex(digest);
+    console.log("hashToSign", hashToSign);
     // 4. Create and sign the payload for the target RPC method
     const urlPath = `https://api.privy.io/v1/wallets/${WALLET_ID}/raw_sign`;
     const body = {
         params: {
-            hash: "0x0bd61313bc3103e806197bd99da4a6a6c567428e27b099365fd52c16daf05f03",
+            hash: hashToSign,
         },
     };
     const signature = generateAuthorizationSignature({
@@ -123,7 +168,18 @@ async function main() {
         console.error("raw_sign failed:", rawResp.status, await rawResp.text());
         throw new Error("Privy raw_sign request failed");
     }
-    console.log("📝 raw_sign response:", await rawResp.json());
+    // console.log("📝 raw_sign response:", await rawResp.json());
+    const rawSign = await rawResp.json();
+    console.log("rawsign", rawSign);
+    const rawSignature = await rawSign.data.signature;
+    console.log("Rawsign", rawSignature);
+    const txSignature = toSerializedSignature({
+        signature: rawSignature,
+        signatureScheme: "ED25519",
+        publicKey: publicKeyObj,
+    });
+    const signer = await verifyTransactionSignature(txBytes, txSignature, { address });
+    console.log(signer.toSuiAddress() === address); // true
 }
 main().catch((err) => {
     console.error("Fatal error:", err);
