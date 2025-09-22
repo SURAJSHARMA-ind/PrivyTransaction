@@ -154,7 +154,7 @@ async function main() {
   const urlPath = `https://api.privy.io/v1/wallets/${WALLET_ID}/raw_sign`;
   const body = {
     params: {
-      hash: "0x8e5b98f019743969c9d48096003fa8d9012ec2c92d0f8997eeca3a77a4b0fba9",
+      hash: "0xb9b8c463b221226467e3296efdcd16256b0d628bfb6b441c6eb375d511a8a6e4",
     },
   };
 
