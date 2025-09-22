@@ -10,7 +10,7 @@ const WALLET_ID = "fcvsl05oo5muzkdizixbvz62";
 const PRIVY_APP_ID = "cmdip4eml0064l40jspyn9iii";
 const USER_JWT = "";
 const PRIVY_APP_SECRET = "";
-.
+
 // --- TYPE DEFINITIONS ---
 interface AuthResponse {
   encrypted_authorization_key?: {
@@ -135,6 +135,7 @@ async function main() {
   }
 
   const data: AuthResponse = await authResp.json();
+  console.log("Authenticate data",data)
   const encryptedKey = data?.encrypted_authorization_key;
 
   if (!encryptedKey?.encapsulated_key || !encryptedKey?.ciphertext) {
@@ -153,7 +154,7 @@ async function main() {
   const urlPath = `https://api.privy.io/v1/wallets/${WALLET_ID}/raw_sign`;
   const body = {
     params: {
-      hash: "0x0bd61313bc3103e806197bd99da4a6a6c567428e27b099365fd52c16daf05f03",
+      hash: "0x8e5b98f019743969c9d48096003fa8d9012ec2c92d0f8997eeca3a77a4b0fba9",
     },
   };
 

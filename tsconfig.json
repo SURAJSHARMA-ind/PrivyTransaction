@@ -11,6 +11,6 @@
     "types": ["node"],                      /* ensure Node.js built-ins are typed */
     "resolveJsonModule": true
   },
-  "include": ["./**/*.ts"],
+  "include": ["./**/*.ts", "utils/transaction.js"],
   "exclude": ["node_modules"]
 }
